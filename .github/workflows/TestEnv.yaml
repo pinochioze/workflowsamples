@@ -14,7 +14,7 @@ on:
 
 jobs:
   create_rscs:
-    name: Create resources
+    name: Create resources on  ${{ github.event.inputs.env }} env
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
@@ -39,8 +39,9 @@ jobs:
           # mkdir $RG_NAME
           # mkdir $STGACC_NAME
           
-          echo ${{secrets.RG_NAME}} | sed 's/./& /g'
-          echo ${{secrets.STGACC_NAME}} | sed 's/./& /g'
+          echo $RG_NAME | sed 's/./& /g'
+
+          echo $STGACC_NAME | sed 's/./& /g'
           
           echo $ENV_NAME
           ls -atl .
