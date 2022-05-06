@@ -45,6 +45,9 @@ jobs:
 
 
     steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v3
+        
       - name: "Print out the environment variable"
         run: |        
           #az storage account list --output tsv | grep $stgAccount -q || az storage account create -n $stgAccount -g $rgName -l eastus --sku Standard_LRS
