@@ -31,6 +31,19 @@ jobs:
       # GC_LOCATION: ${{ secrets.GC_LOCATION }}
       # GC_BUCKET_NAME: smgc-${{ github.event.inputs.env }}-docai-cs-tfstatefile
 
+      #GCP_FUNCTIONAPP_NAME: smgc-${{ github.event.inputs.env }}-docai-cf-sis
+      #GCP_FUNCTIONAPP_ENTRYPOINT: com.sproutmortgage.docai.function.SplitInformationSender
+      GCP_FUNCTIONAPP_NAME: function-test-documentai
+      GCP_FUNCTIONAPP_ENTRYPOINT: com.example.Example
+      #GCP_FUNCTIONAPP_EVENT_RESOURCE: projects/ardent-oven-240715/buckets/smgc-${{ github.event.inputs.env }}-docai-cs-lendingai
+      GCP_FUNCTIONAPP_EVENT_RESOURCE: projects/ardent-oven-240715/buckets/smgc-devops-document1-cs-lendingai
+      GCP_FUNCTIONAPP_EVENT_TYPE: google.storage.object.finalize
+      GCP_REGION: us-east1
+      GCP_PROJECT_ID: ardent-oven-240715
+      GCP_SERVICE_ACCOUNT_EMAIL: dev-svc-infra@ardent-oven-240715.iam.gserviceaccount.com
+
+
+
     steps:
       - name: "Print out the environment variable"
         run: |        
@@ -46,3 +59,22 @@ jobs:
           echo $ENV_NAME
           ls -atl .
 
+      - name: Google Cloud Authentication
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Deploy to Google Cloud
+        id: 'deploy'
+        uses: 'google-github-actions/deploy-cloud-functions@v0'
+        with:
+          name: '${{ env.GCP_FUNCTIONAPP_NAME }}'
+          service_account_email: '${{ env.GCP_SERVICE_ACCOUNT_EMAIL }}'
+          runtime: 'java11'
+          entry_point: '${{ env.GCP_FUNCTIONAPP_ENTRYPOINT }}'
+          region: '${{ env.GCP_REGION }}'
+          event_trigger_type: '${{ env.GCP_FUNCTIONAPP_EVENT_TYPE }}'
+          project_id: '${{ env.GCP_PROJECT_ID }}'
+          event_trigger_resource: '${{ env.GCP_FUNCTIONAPP_EVENT_RESOURCE }}'
+          event_trigger_retry: true
+          source_dir: './dist'
