@@ -41,8 +41,8 @@ jobs:
       GCP_REGION: us-east1
       GCP_PROJECT_ID: ardent-oven-240715
       GCP_SERVICE_ACCOUNT_EMAIL: dev-svc-infra@ardent-oven-240715.iam.gserviceaccount.com
-
-
+      GC_FUNCTION_VARIABLES: '${{ secrets.GC_FUNCTION_VARIABLES }}'
+      GC_FUNCTION_SECRET: '${{ secrets.GC_FUNCTION_SECRET }}'
 
     steps:
       - name: "Checkout source code"
@@ -81,5 +81,5 @@ jobs:
           event_trigger_resource: '${{ env.GCP_FUNCTIONAPP_EVENT_RESOURCE }}'
           event_trigger_retry: true
           source_dir: './dist'
-          env_vars: 'KEY1=VALUE1,KEY2=VALUE2'
-          secret_environment_variables: 'KEY3=projects/470040826351/secrets/SMGC-DEV-AZURE-EVENT-GRID-KEY/versions/latest'
+          env_vars: $GC_FUNCTION_VARIABLES
+          secret_environment_variables: "KEY3=projects/$GCP_PROJECT_ID/secrets/$GC_FUNCTION_SECRET/versions/latest"
