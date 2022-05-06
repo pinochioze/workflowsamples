@@ -84,4 +84,4 @@ jobs:
           env_vars: ${{ env.GC_FUNCTION_VARIABLES }}
           #env_vars: 'KEY1=VALUE1,KEY2=VALUE2'
           #secret_environment_variables: "KEY3=projects/470040826351/secrets/SMGC-DEV-AZURE-EVENT-GRID-KEY/versions/latest"
-          secret_environment_variables: "KEY3=projects/${{ env.GCP_PROJECT_ID }}/secrets/${{ env.GC_FUNCTION_SECRET }}/versions/latest"
+          secret_environment_variables: ${{ env.GC_FUNCTION_SECRET }}
